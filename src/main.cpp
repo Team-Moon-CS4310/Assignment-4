@@ -2,10 +2,13 @@
 #include <string>
 #include <thread>
 #include <regex>
-
+#include <filesystem>
 using namespace std;
 
-std::string *separate(const std::string &input)
+static string directory;
+
+std::string *
+separate(const std::string &input)
 {
     int index = 0;
     std::string *t = new std::string[3];
@@ -26,10 +29,15 @@ std::string *separate(const std::string &input)
 }
 
 void getInput();
+void cd(string destination);
+void ls();
+void pwd();
 
 int main(int argc, char const *argv[])
 {
     //TODO what to do when input is very long or too many args?
+    directory = std::filesystem::current_path();
+
     thread test(getInput);
 
     test.join();
@@ -46,19 +54,47 @@ void getInput()
 
         string *args = separate(input);
 
+        //TODO implement
         if (args[0] == "cd")
         {
-            cout << "cdtest";
+            cd(args[1]);
         }
         else if (args[0] == "pwd")
         {
+            pwd();
+        }
+        else if (args[0] == "ls")
+        {
+            ls();
         }
         else if (args[0] == "exit")
         {
             cout << "Goodbye!";
             return;
         }
+        else 
+        {
+            cout << args[0] << ": command not foud\n"
+        }
 
         //this_thread::yield();
+    }
+}
+
+void cd(string newDestination)
+{
+    cout << "cdtest\n";
+}
+
+void pwd()
+{
+    cout << directory << "\n";
+}
+
+void ls()
+{
+    for (std::filesystem::directory_entry p : std::filesystem::directory_iterator(directory))
+    {
+        cout << p.path().filename().generic_string() << "\n";
     }
 }
