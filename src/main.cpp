@@ -1,9 +1,22 @@
-#include "commands.hpp"
+#include <filesystem>
+#include <iostream>
+#include <regex>
+#include <string>
+#include <thread>
+using namespace std;
 
-std::string *separate(const std::string &input);
+void getInput();
+void cd(string destination);
+void ls();
+void pwd();
+void mkdir(string newDir);
+void rmdir(string dir);
+void cp(string first, string second);
+
+string *separate(const string &input);
 
 int main(int argc, char const *argv[]) {
-	directory = std::filesystem::current_path();
+	cout << "\033[34m" << filesystem::current_path() << "\033[0m>";	 // Print the current path. Similar to windows cmd.
 
 	thread test(getInput);
 
@@ -27,26 +40,33 @@ void getInput() {
 		} else if (args[0] == "ls") {
 			ls();
 		} else if (args[0] == "exit") {
-			cout << "Goodbye!\n";
+			cout << "Arrivederci!\n";
 			return;
-		} else {
-			cout << args[0] << ": command not foud\n";
+		} else if (args[0] == "mkdir") {
+			mkdir(args[1]);
+		} else if (args[0] == "rmdir") {
+			rmdir(args[1]);
+		} else if (args[0] == "cp") {
+			cp(args[1], args[2]);
+		} else if (filesystem::is_regular_file(args[0])) {
+			// check if file is executable, then run it.
 		}
 
-		cout << directory << ">";  // Print the current path. Similar to windows cmd.
-
-		// this_thread::yield();
+		else {
+			cout << args[0] << ": command not found\n";
+		}
+		cout << "\033[34m" << filesystem::current_path() << "\033[0m>";	 // Print the current path. Similar to windows cmd.
 	}
 }
 
-std::string *separate(const std::string &input) {
+string *separate(const string &input) {
 	int index = 0;
-	std::string *t = new std::string[3];
-	std::regex reg("(\\S+)");
+	string *t = new string[3];
+	regex reg("(\\S+)");
 
 	// Thankyou https://www.regular-expressions.info/stdregex.html
-	std::sregex_iterator next(input.begin(), input.end(), reg);
-	std::sregex_iterator end;
+	sregex_iterator next(input.begin(), input.end(), reg);
+	sregex_iterator end;
 
 	for (smatch mat = *next; next != end; mat = *next) {
 		t[index] = mat.str();
@@ -55,4 +75,66 @@ std::string *separate(const std::string &input) {
 	}
 
 	return t;
+}
+
+void cd(string newDestination) {
+	if (newDestination == "") {
+		filesystem::current_path(filesystem::current_path().root_path());
+	} else {
+		if (filesystem::is_directory(newDestination)) {
+			filesystem::current_path(newDestination);
+		}
+	}
+
+	//Can set directory properly
+	// Relative path = everything after the C:\
+  // root path = rootname + rootdirectory, ex: C:\
+  // root directory = \
+  // root name = C: for example.
+	// Stem = file w/o file extension.
+	// filename == full filename with extension
+	// Parent path = path 1 step above current, up until hit /
+	// Extension = file extension only
+
+	/* DEBUG TODO remove
+	cout << directory.relative_path() << "\n";
+	cout << directory.root_path() << "\n";
+	cout << directory.root_directory() << "\n";
+	cout << directory.root_name() << "\n";
+	cout << directory.stem() << "\n";
+	cout << directory.filename() << "\n";
+	cout << directory.parent_path() << "\n";
+	cout << directory.extension() << "\n";
+  */
+}
+
+void pwd() {
+	cout << filesystem::current_path() << "\n";
+}
+
+void ls() {
+	int col = 0;
+	for (filesystem::directory_entry p : filesystem::directory_iterator(filesystem::current_path())) {
+		// colum size of 5.
+		if (col == 5) {
+			cout << "\n";
+			col = 0;
+		}
+		if (filesystem::is_directory(p.path())) {
+			cout << "\033[44;1;30m" << p.path().filename().generic_string() << "\033[0m ";
+		} else {
+			cout << p.path().filename().generic_string() << " ";
+		}
+		col++;
+	}
+	cout << "\n";
+}
+
+void mkdir(string newDir) {
+}
+
+void rmdir(string dir) {
+}
+
+void cp(string first, string second) {
 }
