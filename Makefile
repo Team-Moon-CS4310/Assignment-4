@@ -1,14 +1,17 @@
-debug: OurTerminal.exe
-	gdb OurTerminal.exe
+run: build
+	./OurTerminal.exe
+
+buildDebug: src/main.cpp
+	g++ -std=c++17 -g src/main.cpp -pthread -o OurTerminal.exe
 
 OurTerminal.exe: 
 	build
 
-run: OurTerminal.exe
-	./OurTerminal.exe
-
 build: src/main.cpp
-	c++ src/main.cpp -pthread -o OurTerminal.exe
+	g++ -std=c++17 src/main.cpp -pthread -o OurTerminal.exe
 
 clean: OurTerminal.exe
 	rm OurTerminal.exe
+
+debug: buildDebug
+	gdb OurTerminal.exe

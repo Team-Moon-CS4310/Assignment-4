@@ -1,100 +1,58 @@
-#include <iostream>
-#include <string>
-#include <thread>
-#include <regex>
-#include <filesystem>
-using namespace std;
+#include "commands.hpp"
 
-static string directory;
+std::string *separate(const std::string &input);
 
-std::string *
-separate(const std::string &input)
-{
-    int index = 0;
-    std::string *t = new std::string[3];
-    std::regex reg("(\\S+)");
+int main(int argc, char const *argv[]) {
+	directory = std::filesystem::current_path();
 
-    // Thankyou https://www.regular-expressions.info/stdregex.html
-    std::sregex_iterator next(input.begin(), input.end(), reg);
-    std::sregex_iterator end;
+	thread test(getInput);
 
-    for (smatch mat = *next; next != end; mat = *next)
-    {
-        t[index] = mat.str();
-        index++;
-        next++;
-    }
-
-    return t;
+	test.join();
+	return 0;
 }
 
-void getInput();
-void cd(string destination);
-void ls();
-void pwd();
+void getInput() {
+	while (true) {
+		string input;
+		// TODO what to do when input is very long or too many args?
+		getline(cin, input, '\n');
 
-int main(int argc, char const *argv[])
-{
-    //TODO what to do when input is very long or too many args?
-    directory = std::filesystem::current_path();
+		string *args = separate(input);
 
-    thread test(getInput);
+		// TODO implement
+		if (args[0] == "cd") {
+			cd(args[1]);
+		} else if (args[0] == "pwd") {
+			pwd();
+		} else if (args[0] == "ls") {
+			ls();
+		} else if (args[0] == "exit") {
+			cout << "Goodbye!\n";
+			return;
+		} else {
+			cout << args[0] << ": command not foud\n";
+		}
 
-    test.join();
+		cout << directory << ">";  // Print the current path. Similar to windows cmd.
 
-    return 0;
+		// this_thread::yield();
+	}
 }
 
-void getInput()
-{
-    while (true)
-    {
-        string input;
-        getline(cin, input, '\n');
+std::string *separate(const std::string &input) {
+	int index = 0;
+	std::string *t = new std::string[3];
+	std::regex reg("(\\S+)");
 
-        string *args = separate(input);
+	// Thankyou https://www.regular-expressions.info/stdregex.html
+	std::sregex_iterator next(input.begin(), input.end(), reg);
+	std::sregex_iterator end;
 
-        //TODO implement
-        if (args[0] == "cd")
-        {
-            cd(args[1]);
-        }
-        else if (args[0] == "pwd")
-        {
-            pwd();
-        }
-        else if (args[0] == "ls")
-        {
-            ls();
-        }
-        else if (args[0] == "exit")
-        {
-            cout << "Goodbye!";
-            return;
-        }
-        else 
-        {
-            cout << args[0] << ": command not foud\n"
-        }
+	for (smatch mat = *next; next != end; mat = *next) {
+		t[index] = mat.str();
+		index++;
+		next++;
+	}
 
-        //this_thread::yield();
-    }
-}
-
-void cd(string newDestination)
-{
-    cout << "cdtest\n";
-}
-
-void pwd()
-{
-    cout << directory << "\n";
-}
-
-void ls()
-{
-    for (std::filesystem::directory_entry p : std::filesystem::directory_iterator(directory))
-    {
-        cout << p.path().filename().generic_string() << "\n";
-    }
+	return t;
 }
