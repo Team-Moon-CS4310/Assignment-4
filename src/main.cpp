@@ -131,6 +131,27 @@ void ls() {
 }
 
 void mkdir(string newDir) {
+	// Check if directory / file with name "newDir" exists
+	// If exists, error
+	// If does not exist, create directory
+
+	bool directoryExists = false;
+
+	for (filesystem::directory_entry p : filesystem::directory_iterator(filesystem::current_path())) {
+		if (p.path().filename() == newDir) {
+			directoryExists = true;
+		}
+	}
+
+	if (directoryExists) {
+		cout << "mkdir: cannot create directory \'" << newDir << "\': File exists";
+	}
+	else if (!directoryExists) {
+		filesystem::path file (newDir);
+		filesystem::path newDirectoryPath = filesystem::current_path() / file;
+		filesystem::create_directory(newDirectoryPath);
+	}
+	cout << "\n";
 }
 
 void rmdir(string dir) {
