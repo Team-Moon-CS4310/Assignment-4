@@ -147,14 +147,37 @@ void mkdir(string newDir) {
 		cout << "mkdir: cannot create directory \'" << newDir << "\': File exists";
 	}
 	else if (!directoryExists) {
-		filesystem::path file (newDir);
-		filesystem::path newDirectoryPath = filesystem::current_path() / file;
+		filesystem::path directory (newDir);
+		filesystem::path newDirectoryPath = filesystem::current_path() / directory;
 		filesystem::create_directory(newDirectoryPath);
 	}
 	cout << "\n";
 }
 
 void rmdir(string dir) {
+	// Check if directory with name "dir" exists
+	// If exists, remove
+	// If does not exist, error
+
+	bool directoryExists = false;
+
+	for (filesystem::directory_entry p : filesystem::directory_iterator(filesystem::current_path())) {
+		if (filesystem::is_directory(p.path()) && p.path().filename() == newDir) {
+			directoryExists = true;
+		}
+	}
+
+	if (directoryExists) {
+		filesystem::path directory (dir);
+		filesystem::path directoryPathToBeRemoved = filesystem::current_path() / directory;
+		filesystem::remove(directoryPathToBeRemoved);
+	}
+	else if (!directoryExists) {
+		cout << "rmdir: cannot remove \'" << dir << "\': No such directory";
+
+	}
+	cout << "\n";
+
 }
 
 void cp(string first, string second) {
