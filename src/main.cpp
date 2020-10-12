@@ -12,6 +12,7 @@ void pwd();
 void mkdir(string newDir);
 void rmdir(string dir);
 void cp(string first, string second);
+void execute(string file);
 
 string *separate(const string &input);
 
@@ -49,7 +50,7 @@ void getInput() {
 		} else if (args[0] == "cp") {
 			cp(args[1], args[2]);
 		} else if (filesystem::is_regular_file(args[0])) {
-			// check if file is executable, then run it.
+			execute(args[1]);
 		}
 
 		else {
@@ -175,4 +176,8 @@ void rmdir(string dir) {
 }
 
 void cp(string first, string second) {
+}
+
+void execute(string file){
+
 }
