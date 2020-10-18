@@ -3,6 +3,7 @@
 #include <regex>
 #include <string>
 #include <thread>
+#include <fstream>
 using namespace std;
 
 void getInput();
@@ -176,6 +177,11 @@ void rmdir(string dir) {
 }
 
 void cp(string first, string second) {
+	//filesystem::create_directory("testDir");
+	//ofstream("testDir/file.txt").put('a');
+	
+	const auto options = filesystem::copy_options::overwrite_existing;
+	filesystem::copy(first, second, options);
 }
 
 void execute(string file){
