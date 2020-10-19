@@ -1,0 +1,8 @@
+Prerequisites:
+   1. Have a linux environment running.
+   2. Have "g++" installed, with g++17 (g++ version 17) working.
+   3. Have "make" installed and working.
+To run the project:
+   1. Unpack the assignment.
+   2. Navigate the terminal to the Makefile directory.
+   3. Run "make run" or just "make".

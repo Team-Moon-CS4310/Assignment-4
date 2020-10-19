@@ -1,9 +1,9 @@
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <regex>
 #include <string>
 #include <thread>
-#include <fstream>
 using namespace std;
 
 void getInput();
@@ -18,15 +18,14 @@ void execute(string file);
 string *separate(const string &input);
 
 int main(int argc, char const *argv[]) {
-	cout << "\033[34m" << filesystem::current_path() << "\033[0m>";	 // Print the current path. Similar to windows cmd.
-
-	thread test(getInput);
+	thread test(getInput);	//LOOKAT probably not necessary. Will be necessary for execute though.
 
 	test.join();
 	return 0;
 }
 
 void getInput() {
+	cout << "\033[34m" << filesystem::current_path().c_str() << "\033[0m>";	 // Print the current path. Similar to windows cmd.
 	while (true) {
 		string input;
 		// TODO what to do when input is very long or too many args?
@@ -52,12 +51,10 @@ void getInput() {
 			cp(args[1], args[2]);
 		} else if (filesystem::is_regular_file(args[0])) {
 			execute(args[1]);
-		}
-
-		else {
+		} else {
 			cout << args[0] << ": command not found\n";
 		}
-		cout << "\033[34m" << filesystem::current_path() << "\033[0m>";	 // Print the current path. Similar to windows cmd.
+		cout << "\033[34m" << filesystem::current_path().c_str() << "\033[0m>";	 // Print the current path. Similar to windows cmd.
 	}
 }
 
@@ -87,27 +84,6 @@ void cd(string newDestination) {
 			filesystem::current_path(newDestination);
 		}
 	}
-
-	//Can set directory properly
-	// Relative path = everything after the C:\
-  // root path = rootname + rootdirectory, ex: C:\
-  // root directory = \
-  // root name = C: for example.
-	// Stem = file w/o file extension.
-	// filename == full filename with extension
-	// Parent path = path 1 step above current, up until hit /
-	// Extension = file extension only
-
-	/* DEBUG TODO remove
-	cout << directory.relative_path() << "\n";
-	cout << directory.root_path() << "\n";
-	cout << directory.root_directory() << "\n";
-	cout << directory.root_name() << "\n";
-	cout << directory.stem() << "\n";
-	cout << directory.filename() << "\n";
-	cout << directory.parent_path() << "\n";
-	cout << directory.extension() << "\n";
-  */
 }
 
 void pwd() {
@@ -179,11 +155,10 @@ void rmdir(string dir) {
 void cp(string first, string second) {
 	//filesystem::create_directory("testDir");
 	//ofstream("testDir/file.txt").put('a');
-	
+
 	const auto options = filesystem::copy_options::overwrite_existing;
 	filesystem::copy(first, second, options);
 }
 
-void execute(string file){
-
+void execute(string file) {
 }

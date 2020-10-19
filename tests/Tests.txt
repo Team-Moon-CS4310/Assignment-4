@@ -1,0 +1,16 @@
+LS:
+   "ls":
+   Expected result: Output of all the things in that directory, with folders being highlighted blue.
+
+CD:
+   "cd":
+   Expected result: Moves the current working directory to root.
+
+   "cd <root/.../directory>":
+   Expected result: Moves the current working directory to "root/.../directory" if exists.
+
+   "cd <directory>":
+   Expected result: Moves the current working directory to "root/.../directory" if exists.
+
+   "cd ..":
+   Expected result: Moves the current working directory to the parent directory if exists.
