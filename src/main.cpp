@@ -5,6 +5,7 @@
 #include <string>
 #include <thread>
 #include <unistd.h>
+#include <sys/wait.h> 
 using namespace std;
 
 void getInput();
@@ -50,13 +51,9 @@ void getInput() {
 			rmdir(args[1]);
 		} else if (args[0] == "cp") {
 			cp(args[1], args[2]);
-		} /*else if (filesystem::is_regular_file(args[0])) {
-			execute(args[1]);
-		}*/
-		  else if (args[0] == "execute") {
-			  execute(args[1]);
-		  }
-
+		} else if (filesystem::is_regular_file(args[0])) {
+			execute(args[0]);
+		}
 		else {
 			cout << args[0] << ": command not found\n";
 		}
@@ -136,6 +133,7 @@ void mkdir(string newDir) {
 	}
 }
 
+
 void rmdir(string dir) {
 	// Check if directory with name "dir" exists
 	// If exists, remove
@@ -177,8 +175,16 @@ void cp(string first, string second) {
 }
 
 void execute(string file){
-	cout << "In execute function\n";
-	const char *args[] = {"./test", NULL};
-	execv(args[0], (char* const*)args);
-	cout << "Didn't work\n";
+	pid_t p;
+	p = fork();
+	wait(NULL);
+
+	if(p == -1) {
+		cout << "Error calling fork()\n";
+	}
+
+	if(p == 0){
+	const char *args[] = {NULL};
+	execv(file.c_str(), (char* const*)args);
+	}
 }

@@ -3,5 +3,6 @@
 int main(int argc, char* argv[]) {
     using namespace std;
 
-    cout << "You are in test.\n";
+    cout << "Hello world\n";
+    return 0;
 }
