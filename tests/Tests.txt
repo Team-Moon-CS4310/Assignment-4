@@ -14,3 +14,12 @@ CD:
 
    "cd ..":
    Expected result: Moves the current working directory to the parent directory if exists.
+   
+MKDIR:
+   "mkdir <directory>":
+   Expected result: Creates a new directory "directory" in the current working directory if it does not exists.
+                    If "directory" exists, prints error message "mkdir: cannot create directory 'directory': File exists"
+RMDIR:
+   "rkdir <directory>":
+   Expected result: Removes a directory "directory" in the current working directory if exists.
+                    If "directory" does not exists, prints error message "rmdir: cannot remove 'directory': No such directory"
