@@ -1,0 +1,4 @@
+Provided the functionality, design, and testing for:
+   CD, PWD, LS, and EXIT.
+   Additionally, provided the functionality, design, and testing for:
+   Custom coloring, getInput(), and separate().

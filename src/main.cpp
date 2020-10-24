@@ -1,19 +1,20 @@
+#include <sys/wait.h>
+#include <unistd.h>
+
 #include <filesystem>
 #include <fstream>
 #include <iostream>
 #include <regex>
 #include <string>
 #include <thread>
-#include <unistd.h>
-#include <sys/wait.h> 
 using namespace std;
 
 void getInput();
 void cd(string destination);
-void ls();
 void pwd();
 void mkdir(string newDir);
 void rmdir(string dir);
+void ls();
 void cp(string first, string second);
 void execute(string file);
 bool checkFile(string file);
@@ -21,9 +22,7 @@ bool checkFile(string file);
 string *separate(const string &input);
 
 int main(int argc, char const *argv[]) {
-	thread test(getInput);	//LOOKAT probably not necessary. Will be necessary for execute though.
-
-	test.join();
+	getInput();
 	return 0;
 }
 
@@ -53,12 +52,12 @@ void getInput() {
 		} else if (args[0] == "cp") {
 			cp(args[1], args[2]);
 		} else if (checkFile(args[0])) {
-			if(filesystem::is_regular_file(args[0]) && filesystem::exists(args[0])) {
+			if (filesystem::is_regular_file(args[0]) && filesystem::exists(args[0])) {
 				execute(args[0]);
+			} else {
+				cout << "File: \'" << args[0].substr(2, args[0].length()) << "\' does not exist.\n";
 			}
-			else {
-				cout << "File: \'" << args[0] << "\' does not exist.\n";
-			}
+		} else if (args->empty()) {
 		} else {
 			cout << args[0] << ": command not found\n";
 		}
@@ -71,7 +70,6 @@ string *separate(const string &input) {
 	string *t = new string[3];
 	regex reg("(\\S+)");
 
-	// Thankyou https://www.regular-expressions.info/stdregex.html
 	sregex_iterator next(input.begin(), input.end(), reg);
 	sregex_iterator end;
 
@@ -90,6 +88,8 @@ void cd(string newDestination) {
 	} else {
 		if (filesystem::is_directory(newDestination)) {
 			filesystem::current_path(newDestination);
+		} else {
+			cout << "cd: " << newDestination << ": No such file or directory\n";
 		}
 	}
 }
@@ -138,7 +138,6 @@ void mkdir(string newDir) {
 	}
 }
 
-
 void rmdir(string dir) {
 	// Check if directory with name "dir" exists
 	// If exists, remove
@@ -163,41 +162,39 @@ void rmdir(string dir) {
 
 void cp(string first, string second) {
 	bool doesExist = false;
-	
+
 	for (filesystem::directory_entry p : filesystem::directory_iterator(filesystem::current_path())) {
 		if (filesystem::exists(first)) {
 			doesExist = true;
 		}
 	}
 
-	if (doesExist) {	
-	const auto options = filesystem::copy_options::overwrite_existing;
-	filesystem::copy(first, second);
-	}
-	else {
+	if (doesExist) {
+		const auto options = filesystem::copy_options::overwrite_existing;
+		filesystem::copy(first, second);
+	} else {
 		cout << "cp: cannot copy \'" << first << "\': Given file or directory not found\n";
 	}
 }
 
-void execute(string file){
+void execute(string file) {
 	pid_t p;
 	p = fork();
 	wait(NULL);
 
-	if(p == -1) {
+	if (p == -1) {
 		cout << "Error calling fork()\n";
 	}
 
-	if(p == 0){
-	const char *args[] = {NULL};
-	execv(file.c_str(), (char* const*)args);
+	if (p == 0) {
+		const char *args[] = {NULL};
+		execv(file.c_str(), (char *const *)args);
 	}
 }
 
-bool checkFile(string file){
+bool checkFile(string file) {
 	if (file[0] == '.' && file[1] == '/') {
 		return true;
 	}
 	return false;
 }
-

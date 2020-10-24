@@ -1,28 +1,35 @@
-LS:
-   "ls":
-   Expected result: Output of all the things in that directory, with folders being highlighted blue.
-
 CD:
    "cd":
    Expected result: Moves the current working directory to root.
 
    "cd <root/.../directory>":
    Expected result: Moves the current working directory to "root/.../directory" if exists.
+                    If directory doesn't exist, then outputs "cd: <root/.../directory>: No such file or directory"
 
    "cd <directory>":
    Expected result: Moves the current working directory to "root/.../directory" if exists.
+                    If directory doesn't exist, then outputs "cd: <directory>: No such file or directory"
 
    "cd ..":
    Expected result: Moves the current working directory to the parent directory if exists.
-   
+
+PWD:
+   "pwd":
+   Expected result: Outputs the current working directory.
+
 MKDIR:
    "mkdir <directory>":
    Expected result: Creates a new directory "directory" in the current working directory if it does not exists.
                     If "directory" exists, prints error message "mkdir: cannot create directory 'directory': File exists"
+
 RMDIR:
    "rkdir <directory>":
    Expected result: Removes a directory "directory" in the current working directory if exists.
                     If "directory" does not exists, prints error message "rmdir: cannot remove 'directory': No such directory"
+
+LS:
+   "ls":
+   Expected result: Output of all the things in that directory, with folders being highlighted blue.
 
 CP:
    "cp <file/directory from> <file/directory to>":
@@ -31,9 +38,15 @@ CP:
                     Overwrites second file/directory, if it exists. 
                     If second file/directory doesn't exist, creates the file/directory.
 
-EXECUTE:
-   "<root/.../file>":
-   Expected result: Runs executable file, if it exists.  
+EXIT:
+   "exit":
+   Expected result: Outputs "Arrivederci!" and then exits the program.
 
-   "<file>":
+EXECUTE:
+   "./<root/.../file>":
    Expected result: Runs executable file, if it exists.
+                    If file doesn't exist, then outputs "File: '<root/.../file>' does not exist."
+
+   "./<file>":
+   Expected result: Runs executable file, if it exists.
+                    If file doesn't exist, then outputs "File: '<file>' does not exist."
