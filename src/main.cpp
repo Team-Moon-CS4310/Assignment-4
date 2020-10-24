@@ -101,7 +101,7 @@ void pwd() {
 void ls() {
 	int col = 0;
 	for (filesystem::directory_entry p : filesystem::directory_iterator(filesystem::current_path())) {
-		// colum size of 5.
+		// column size of 5.
 		if (col == 5) {
 			cout << "\n";
 			col = 0;

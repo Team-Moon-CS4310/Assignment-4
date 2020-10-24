@@ -1,0 +1,2 @@
+Provided the functionality, design, and testing for CP and EXECUTE.
+Also created the function "checkFile()" to check whether an input was meant to be a file execution.
