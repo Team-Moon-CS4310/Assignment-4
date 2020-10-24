@@ -23,3 +23,17 @@ RMDIR:
    "rkdir <directory>":
    Expected result: Removes a directory "directory" in the current working directory if exists.
                     If "directory" does not exists, prints error message "rmdir: cannot remove 'directory': No such directory"
+
+CP:
+   "cp <file/directory from> <file/directory to>":
+   Expected result: Copies contents from first file/directory to second file/directory.
+                    If first file/directory does not exist, prints error messsage "cp: cannot copy '<file/directory>': Given file or directory not found"
+                    Overwrites second file/directory, if it exists. 
+                    If second file/directory doesn't exist, creates the file/directory.
+
+EXECUTE:
+   "<root/.../file>":
+   Expected result: Runs executable file, if it exists.  
+
+   "<file>":
+   Expected result: Runs executable file, if it exists.

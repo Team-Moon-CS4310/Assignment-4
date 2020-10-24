@@ -16,6 +16,7 @@ void mkdir(string newDir);
 void rmdir(string dir);
 void cp(string first, string second);
 void execute(string file);
+bool checkFile(string file);
 
 string *separate(const string &input);
 
@@ -51,10 +52,14 @@ void getInput() {
 			rmdir(args[1]);
 		} else if (args[0] == "cp") {
 			cp(args[1], args[2]);
-		} else if (filesystem::is_regular_file(args[0])) {
-			execute(args[0]);
-		}
-		else {
+		} else if (checkFile(args[0])) {
+			if(filesystem::is_regular_file(args[0]) && filesystem::exists(args[0])) {
+				execute(args[0]);
+			}
+			else {
+				cout << "File: \'" << args[0] << "\' does not exist.\n";
+			}
+		} else {
 			cout << args[0] << ": command not found\n";
 		}
 		cout << "\033[34m" << filesystem::current_path().c_str() << "\033[0m>";	 // Print the current path. Similar to windows cmd.
@@ -188,3 +193,11 @@ void execute(string file){
 	execv(file.c_str(), (char* const*)args);
 	}
 }
+
+bool checkFile(string file){
+	if (file[0] == '.' && file[1] == '/') {
+		return true;
+	}
+	return false;
+}
+
