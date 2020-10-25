@@ -1,3 +1,5 @@
 https://www.regular-expressions.info/stdregex.html was used to help with the regex, specifically how to parse through every matched expression.
 https://en.cppreference.com/w/cpp/filesystem was referenced when dealing with the filesystem.
 https://en.cppreference.com/w/cpp/filesystem/path was referenced when dealing with a system path.
+https://linuxhint.com/linux-exec-system-call/ was referenced when dealing with executing programs.
+https://www.geeksforgeeks.org/wait-system-call-c/ was referenced when dealing with fork().
