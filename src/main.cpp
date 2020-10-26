@@ -30,12 +30,11 @@ void getInput() {
 	cout << "\033[34m" << filesystem::current_path().c_str() << "\033[0m>";	 // Print the current path. Similar to windows cmd.
 	while (true) {
 		string input;
-		// TODO what to do when input is very long or too many args?
+
 		getline(cin, input, '\n');
 
 		string *args = separate(input);
 
-		// TODO implement
 		if (args[0] == "cd") {
 			cd(args[1]);
 		} else if (args[0] == "pwd") {
